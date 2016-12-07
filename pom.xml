@@ -6,7 +6,12 @@
 
     <groupId>sp</groupId>
     <artifactId>sp</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>RKleene</module>
+        <module>FloydWarshall</module>
+    </modules>
 
     <properties>
         <giraph-core.version>1.2.0-hadoop2</giraph-core.version>
@@ -15,35 +20,37 @@
         <hadoop-core.version>1.0.2</hadoop-core.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-core</artifactId>
-            <version>${hadoop-core.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-core</artifactId>
+                <version>${hadoop-core.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.apache.giraph</groupId>
-            <artifactId>giraph-core</artifactId>
-            <version>${giraph-core.version}</version>
-        </dependency>
-    </dependencies>
+            <dependency>
+                <groupId>org.apache.giraph</groupId>
+                <artifactId>giraph-core</artifactId>
+                <version>${giraph-core.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
