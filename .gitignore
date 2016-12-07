@@ -12,3 +12,4 @@
 hs_err_pid*
 /.idea/
 /SP-R-Kleene-Floyd-Warshall.iml
+*.iml
