@@ -8,15 +8,42 @@
     <artifactId>sp</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <giraph-core.version>1.2.0-hadoop2</giraph-core.version>
+        <slf4j.version>1.6.4</slf4j.version>
+        <logback.version>1.0.1</logback.version>
+        <hadoop-core.version>1.0.2</hadoop-core.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-core</artifactId>
+            <version>${hadoop-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.giraph</groupId>
             <artifactId>giraph-core</artifactId>
             <version>${giraph-core.version}</version>
         </dependency>
     </dependencies>
-    <properties>
-        <giraph-core.version>1.2.0-hadoop2</giraph-core.version>
-    </properties>
-
 </project>
