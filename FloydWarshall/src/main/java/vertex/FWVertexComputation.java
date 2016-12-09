@@ -30,9 +30,10 @@ public class FWVertexComputation extends BasicComputation<IntWritable, FWVertexM
 
         long middleVertexId = getSuperstep();
 
+        int vertexId = vertex.getId().get();
+
         if (middleVertexId == 0) {
 
-            int vertexId = vertex.getId().get();
             for (int i = 0; i < (int) getTotalNumVertices(); i++) {
                 shortestPaths[vertexId][i] = Long.MAX_VALUE;
             }
@@ -43,11 +44,13 @@ public class FWVertexComputation extends BasicComputation<IntWritable, FWVertexM
 
         } else {
 
-            Vertex<IntWritable, FWVertexMessage, LongWritable> middleVertex = getWorkerForVertex(new IntWritable((int) middleVertexId));
-
             for (FWVertexMessage message : messages ) {
 
-
+                int destVertexId = message.getId().intValue();
+                long sum = shortestPaths[vertexId][(int) middleVertexId] + shortestPaths[(int) middleVertexId][destVertexId];
+                if (sum < shortestPaths[vertexId][destVertexId]) {
+                    shortestPaths[vertexId][destVertexId] = sum;
+                }
 
             }
 
