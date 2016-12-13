@@ -13,7 +13,7 @@ import vertex.data.FWVertexMessage;
 
 import java.io.IOException;
 
-public class FWVertexComputation extends BasicComputation<IntWritable, FWVertexMessage, LongWritable, FWVertexMessage> {
+public class FWVertexComputation extends BasicComputation<IntWritable, LongWritable, LongWritable, LongWritable> {
 
     private static final LongConfOption SOURCE_ID = new LongConfOption("SimpleShortestPathsVertex.sourceId", 1, null);
 
@@ -25,8 +25,8 @@ public class FWVertexComputation extends BasicComputation<IntWritable, FWVertexM
         return vertex.getId().get() == SOURCE_ID.get(getConf());
     }
 
-
-    public void compute(Vertex<IntWritable, FWVertexMessage, LongWritable> vertex, Iterable<FWVertexMessage> messages) throws IOException {
+    @Override
+    public void compute(Vertex<IntWritable, LongWritable, LongWritable> vertex, Iterable<LongWritable> messages) throws IOException {
 
         long middleVertexId = getSuperstep();
 
@@ -44,19 +44,21 @@ public class FWVertexComputation extends BasicComputation<IntWritable, FWVertexM
 
         } else {
 
-            for (FWVertexMessage message : messages ) {
+            for (LongWritable message : messages ) {
 
-                int destVertexId = message.getId().intValue();
-                long sum = shortestPaths[vertexId][(int) middleVertexId] + shortestPaths[(int) middleVertexId][destVertexId];
-                if (sum < shortestPaths[vertexId][destVertexId]) {
+                int destVertexId = (int) message.get();
+                long sum = shortestPaths[vertexId][(int) middleVertexId - 1] + shortestPaths[(int) middleVertexId - 1][destVertexId];
+                LOG.debug("i : " + vertexId + " k : " + middleVertexId + " j : " + destVertexId);
+                if (sum < shortestPaths[vertexId][ destVertexId]) {
                     shortestPaths[vertexId][destVertexId] = sum;
                 }
 
             }
-
         }
 
-
+        for (Edge<IntWritable, LongWritable> edge : vertex.getEdges()) {
+            sendMessage(edge.getTargetVertexId(), new LongWritable(vertexId));
+        }
 
         vertex.voteToHalt();
     }
