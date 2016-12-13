@@ -5,14 +5,15 @@ import org.apache.giraph.conf.LongConfOption;
 import org.apache.giraph.edge.Edge;
 import org.apache.giraph.graph.BasicComputation;
 import org.apache.giraph.graph.Vertex;
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class FWVertexComputation extends BasicComputation<IntWritable, LongWritable, LongWritable, LongWritable> {
+public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWritable, FloatWritable, DoubleWritable> {
 
     private static final LongConfOption SOURCE_ID = new LongConfOption("SimpleShortestPathsVertex.sourceId", 1, null);
 
@@ -24,12 +25,10 @@ public class FWVertexComputation extends BasicComputation<IntWritable, LongWrita
         return vertex.getId().get() == SOURCE_ID.get(getConf());
     }
 
-    @Override
-    public void compute(Vertex<IntWritable, LongWritable, LongWritable> vertex, Iterable<LongWritable> messages) throws IOException {
-
+    public void compute(Vertex<LongWritable, DoubleWritable, FloatWritable> vertex, Iterable<DoubleWritable> messages) throws IOException {
         long middleVertexId = getSuperstep();
 
-        int vertexId = vertex.getId().get();
+        int vertexId = (int) vertex.getId().get();
 
         if (middleVertexId == 0) {
 
@@ -37,13 +36,13 @@ public class FWVertexComputation extends BasicComputation<IntWritable, LongWrita
                 shortestPaths[vertexId][i] = Long.MAX_VALUE;
             }
             shortestPaths[vertexId][vertexId] = 0;
-            for (Edge<IntWritable, LongWritable> edge : vertex.getEdges()) {
-                shortestPaths[vertexId][edge.getTargetVertexId().get()] = edge.getValue().get();
+            for (Edge<LongWritable, FloatWritable> edge : vertex.getEdges()) {
+                shortestPaths[vertexId][(int) edge.getTargetVertexId().get()] = (long) edge.getValue().get();
             }
 
         } else {
 
-            for (LongWritable message : messages ) {
+            for (DoubleWritable message : messages) {
 
                 int destVertexId = (int) message.get();
                 long sum = shortestPaths[vertexId][(int) middleVertexId - 1] + shortestPaths[(int) middleVertexId - 1][destVertexId];
@@ -55,9 +54,10 @@ public class FWVertexComputation extends BasicComputation<IntWritable, LongWrita
             }
         }
 
-        for (Edge<IntWritable, LongWritable> edge : vertex.getEdges()) {
-            sendMessage(edge.getTargetVertexId(), new LongWritable(vertexId));
+        for (Edge<LongWritable, FloatWritable> edge : vertex.getEdges()) {
+            sendMessage(edge.getTargetVertexId(), new DoubleWritable(vertexId));
         }
         vertex.voteToHalt();
+
     }
 }
