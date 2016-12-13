@@ -26,11 +26,13 @@ public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWr
     }
 
     public void compute(Vertex<LongWritable, DoubleWritable, FloatWritable> vertex, Iterable<DoubleWritable> messages) throws IOException {
+
         long middleVertexId = getSuperstep();
 
         int vertexId = (int) vertex.getId().get();
 
-        int graphSize = (int) getTotalNumVertices() + 1;
+        int graphSize = (int) getTotalNumVertices();
+
 
         if (middleVertexId == 0) {
 
@@ -49,8 +51,9 @@ public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWr
             for (DoubleWritable message : messages) {
 
                 int destVertexId = (int) message.get();
-                LOG.debug("Current relaxation info - i : " + vertexId + " k : " + (middleVertexId) + " j : " + destVertexId);
-                long sum = shortestPaths[vertexId][(int) middleVertexId] + shortestPaths[(int) middleVertexId][destVertexId];
+                System.out.println("Current relaxation info - i : " + vertexId + " k : " + (middleVertexId - 1) + " j : " + destVertexId);
+                LOG.debug("Current relaxation info - i : " + vertexId + " k : " + (middleVertexId - 1) + " j : " + destVertexId);
+                long sum = shortestPaths[vertexId][(int) middleVertexId - 1] + shortestPaths[(int) middleVertexId - 1][destVertexId];
                 if (sum < shortestPaths[vertexId][destVertexId]) {
                     shortestPaths[vertexId][destVertexId] = sum;
                 }
@@ -61,6 +64,7 @@ public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWr
         for (Edge<LongWritable, FloatWritable> edge : vertex.getEdges()) {
             sendMessage(edge.getTargetVertexId(), new DoubleWritable(vertexId));
         }
+
         if (graphSize == middleVertexId) {
             vertex.voteToHalt();
         }
