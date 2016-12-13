@@ -61,13 +61,15 @@ public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWr
             }
         }
 
-        for (Edge<LongWritable, FloatWritable> edge : vertex.getEdges()) {
-            sendMessage(edge.getTargetVertexId(), new DoubleWritable(vertexId));
-        }
-
         if (graphSize == middleVertexId) {
             vertex.voteToHalt();
+        } else {
+
+            for (Edge<LongWritable, FloatWritable> edge : vertex.getEdges()) {
+                sendMessage(edge.getTargetVertexId(), new DoubleWritable(vertexId));
+            }
         }
+
     }
 
     private static synchronized void initPaths(int size) {
