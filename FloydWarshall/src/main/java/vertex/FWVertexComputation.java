@@ -47,7 +47,7 @@ public class FWVertexComputation extends BasicComputation<IntWritable, LongWrita
 
                 int destVertexId = (int) message.get();
                 long sum = shortestPaths[vertexId][(int) middleVertexId - 1] + shortestPaths[(int) middleVertexId - 1][destVertexId];
-                LOG.debug("i : " + vertexId + " k : " + middleVertexId + " j : " + destVertexId);
+                LOG.debug("i : " + vertexId + " k : " + (middleVertexId - 1) + " j : " + destVertexId);
                 if (sum < shortestPaths[vertexId][ destVertexId]) {
                     shortestPaths[vertexId][destVertexId] = sum;
                 }
