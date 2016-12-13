@@ -9,7 +9,6 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vertex.data.FWVertexMessage;
 
 import java.io.IOException;
 
@@ -59,7 +58,6 @@ public class FWVertexComputation extends BasicComputation<IntWritable, LongWrita
         for (Edge<IntWritable, LongWritable> edge : vertex.getEdges()) {
             sendMessage(edge.getTargetVertexId(), new LongWritable(vertexId));
         }
-
         vertex.voteToHalt();
     }
 }
