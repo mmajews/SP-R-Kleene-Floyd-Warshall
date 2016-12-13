@@ -9,37 +9,17 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 import java.io.IOException;
 
-
-/**
- * Write out Vertices' IDs and values, but not their edges nor edges' values.
- * This is a useful output format when the final value of the vertex is
- * all that's needed. The boolean configuration parameter reverse.id.and.value
- * allows reversing the output of id and value.
- *
- * @param <I> Vertex index value
- * @param <V> Vertex value
- * @param <E> Edge value
- */
 @SuppressWarnings("rawtypes")
 public class CustomTextOutputFormat<I extends WritableComparable,
         V extends Writable, E extends Writable>
         extends TextVertexOutputFormat<I, V, E> {
 
-    /**
-     * Specify the output delimiter
-     */
     public static final String LINE_TOKENIZE_VALUE = "output.delimiter";
-    /**
-     * Default output delimiter
-     */
+
     public static final String LINE_TOKENIZE_VALUE_DEFAULT = "\t";
-    /**
-     * Reverse id and value order?
-     */
+
     public static final String REVERSE_ID_AND_VALUE = "reverse.id.and.value";
-    /**
-     * Default is to not reverse id and value order.
-     */
+
     public static final boolean REVERSE_ID_AND_VALUE_DEFAULT = false;
 
     @Override
@@ -48,13 +28,8 @@ public class CustomTextOutputFormat<I extends WritableComparable,
     }
 
     protected class IdWithValueVertexWriter extends TextVertexWriterToEachLine {
-        /**
-         * Saved delimiter
-         */
+
         private String delimiter;
-        /**
-         * Cached reserve option
-         */
         private boolean reverseOutput;
 
         @Override
@@ -71,12 +46,15 @@ public class CustomTextOutputFormat<I extends WritableComparable,
         protected Text convertVertexToLine(Vertex<I, V, E> vertex)
                 throws IOException {
 
-            String str = vertex.getId().toString() +
-                    delimiter +
-                    vertex.getValue().toString() +
-                    FWVertexComputation.shortestPaths.length;
+            StringBuilder outputTable = new StringBuilder();
+            final int length = FWVertexComputation.shortestPaths.length;
+            for (int i = 0; i < length; i++) {
+                for (int j = 0; j < FWVertexComputation.shortestPaths[i].length; j++) {
+                    outputTable.append(i).append(",").append(j).append(":").append(FWVertexComputation.shortestPaths[i][j]);
+                }
+            }
 
-            return new Text(str);
+            return new Text(outputTable.toString());
         }
     }
 }
