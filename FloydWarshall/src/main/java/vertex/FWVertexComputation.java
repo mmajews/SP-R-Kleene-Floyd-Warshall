@@ -19,7 +19,7 @@ public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWr
 
     private static final Logger LOG = LoggerFactory.getLogger(FWVertexComputation.class);
 
-    private static long[][] shortestPaths;
+    public static long[][] shortestPaths;
 
     private boolean isSource(Vertex<LongWritable, ?, ?> vertex) {
         return vertex.getId().get() == SOURCE_ID.get(getConf());
