@@ -38,7 +38,7 @@ public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWr
 
             initPaths(graphSize);
 
-            for (int i = 1; i < graphSize; i++) {
+            for (int i = 0; i < graphSize; i++) {
                 shortestPaths[vertexId][i] = Long.MAX_VALUE;
             }
             shortestPaths[vertexId][vertexId] = 0;
