@@ -49,7 +49,7 @@ public class FWVertexComputation extends BasicComputation<LongWritable, DoubleWr
             for (DoubleWritable message : messages) {
 
                 int destVertexId = (int) message.get();
-                LOG.debug("i : " + vertexId + " k : " + (middleVertexId) + " j : " + destVertexId);
+                LOG.debug("Current relaxation info - i : " + vertexId + " k : " + (middleVertexId) + " j : " + destVertexId);
                 long sum = shortestPaths[vertexId][(int) middleVertexId] + shortestPaths[(int) middleVertexId][destVertexId];
                 if (sum < shortestPaths[vertexId][destVertexId]) {
                     shortestPaths[vertexId][destVertexId] = sum;
